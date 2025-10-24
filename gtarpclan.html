@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Dragon — Форум</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #000000, #2b0000);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #ff1a1a;
+            text-shadow: 0 0 15px #ff0000, 0 0 30px #800000;
+            margin-bottom: 30px;
+        }
+
+        #forum {
+            width: 100%;
+            max-width: 600px;
+            background-color: #1a0000;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px #ff1a1a, 0 0 40px #b30000;
+        }
+
+        #messages {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            background-color: #330000;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 5px #ff1a1a;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: none;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #ff1a1a;
+            color: #fff;
+            padding: 10px 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #b30000;
+            transform: scale(1.05);
+        }
+
+        .back {
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 30px;
+            color: #999;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Форум Red Dragon</h1>
+
+<div id="forum">
+    <div id="messages"></div>
+    <input type="text" id="username" placeholder="Ваш ник">
+    <textarea id="message" rows="3" placeholder="Введите сообщение"></textarea>
+    <button onclick="sendMessage()">Отправить</button>
+</div>
+
+<div class="back">
+    <a href="index.html" style="color:#fff; text-decoration:underline;">⬅ Вернуться на главную</a>
+</div>
+
+<footer>© 2025 Red Dragon | Все права защищены</footer>
+
+<script>
+function sendMessage() {
+    const username = document.getElementById('username').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if(username === "" || message === "") {
+        alert("Введите ник и сообщение!");
+        return;
+    }
+
+    const messagesDiv = document.getElementById('messages');
+    const newMessage = document.createElement('div');
+    newMessage.classList.add('message');
+    newMessage.innerHTML = `<strong>${username}:</strong> ${message}`;
+    messagesDiv.appendChild(newMessage);
+
+    document.getElementById('message').value = "";
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+</script>
+
+</body>
+</html>

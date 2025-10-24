@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Red Dragon</title>
     <style>
-        /* Загальні стилі сторінки */
         body {
             margin: 0;
             padding: 0;
@@ -28,7 +27,7 @@
             letter-spacing: 1px;
         }
 
-        a {
+        a.button {
             display: inline-block;
             text-decoration: none;
             background-color: #ff1a1a;
@@ -39,9 +38,10 @@
             letter-spacing: 0.5px;
             box-shadow: 0 0 15px #ff1a1a, 0 0 30px #b30000;
             transition: all 0.3s ease;
+            margin: 10px;
         }
 
-        a:hover {
+        a.button:hover {
             background-color: #b30000;
             box-shadow: 0 0 25px #ff3333, 0 0 50px #ff0000;
             transform: scale(1.05);
@@ -57,8 +57,10 @@
 </head>
 <body>
     <h1>Добро пожаловать на официальный сайт <span style="color:#ff3333;">Red_Dragon</span>!</h1>
-    <a href="links.html">Где нас можно найти</a>
-    
+
+    <a class="button" href="links.html">Где нас можно найти</a>
+    <a class="button" href="gtarpclan.html">Форум GTA RP Екакамов</a>
+
     <footer>© 2025 Red Dragon | All rights reserved</footer>
 </body>
 </html>
