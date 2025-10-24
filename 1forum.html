@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Red Dragon — Чат Ekakamov</title>
+  <title>Red Dragon — Отчет о снятии выговора</title>
   <style>
     body {
       margin: 0;
@@ -121,7 +121,7 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  // Массив запрещённых слов (заменить звездочки на реальные слова)
+  // Массив запрещённых слов (заменить звездочки на слова)
   const badWords = ["сука", "блять", "хуй", "нахуя", "нахуй", "лох", "ебаный", "ебать", "ебал", "соси", "выебать", "выебал", "секс", "порно", "дрочить", "даун", "долбоеб", "Сука", "Блять", "Хуй", "Нахуя", "Нахуй", "Лох", "Ебаный", "Ебать", "Ебал", "Соси", "Выебать", "Выебал", "Секс", "Порно", "Дрочить", "Даун", "Долбоеб", "Гондон", "гондон", "бля", "шлюха", "член", "сук", "гей", "лесби", "нах", "пидор", "пидр"];
 
   function sendMessage() {
@@ -133,11 +133,13 @@
       return;
     }
 
-    // Проверка на запрещённые слова
+    const lowerUsername = username.toLowerCase();
     const lowerMessage = message.toLowerCase();
+
+    // Проверка на запрещённые слова в нике и сообщении
     for (let word of badWords) {
-      if (lowerMessage.includes(word.toLowerCase())) {
-        alert("Сообщение содержит запрещённые слова!");
+      if (lowerUsername.includes(word.toLowerCase()) || lowerMessage.includes(word.toLowerCase())) {
+        alert("Ник или сообщение содержат запрещённые слова!");
         return; // блокируем отправку
       }
     }
@@ -152,6 +154,7 @@
     document.getElementById('message').value = "";
   }
 
+  // Отображение сообщений
   db.ref('reports_chat').on('value', snapshot => {
     const messagesDiv = document.getElementById('messages');
     messagesDiv.innerHTML = "";
