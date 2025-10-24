@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Red Dragon — Чат Екакамов</title>
+  <title>Red Dragon — Отчет о снятии выговора</title>
   <style>
     body {
       margin: 0;
@@ -90,7 +90,7 @@
 </head>
 <body>
 
-<h1>Чат Екакамов — Red Dragon</h1>
+<h1>Отчет о снятии выговора — Red Dragon</h1>
 
 <div id="chat">
   <div id="messages"></div>
@@ -121,6 +121,9 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
+  // Массив запрещённых слов (заменить звездочки на реальные слова)
+  const badWords = ["сука", "блять", "хуй", "нахуя", "нахуй", "лох", "ебаный", "ебать", "ебал", "соси", "выебать", "выебал", "секс", "порно", "дрочить", "даун", "долбоеб", "Сука", "Блять", "Хуй", "Нахуя", "Нахуй", "Лох", "Ебаный", "Ебать", "Ебал", "Соси", "Выебать", "Выебал", "Секс", "Порно", "Дрочить", "Даун", "Долбоеб", "Гондон", "гондон"];
+
   function sendMessage() {
     const username = document.getElementById('username').value.trim();
     const message = document.getElementById('message').value.trim();
@@ -128,6 +131,15 @@
     if(username === "" || message === "") {
       alert("Введите ник и сообщение!");
       return;
+    }
+
+    // Проверка на запрещённые слова
+    const lowerMessage = message.toLowerCase();
+    for (let word of badWords) {
+      if (lowerMessage.includes(word.toLowerCase())) {
+        alert("Сообщение содержит запрещённые слова!");
+        return; // блокируем отправку
+      }
     }
 
     const newMessage = {
