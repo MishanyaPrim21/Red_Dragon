@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Чат — Ekakamov</title>
+<title>Red Dragon — Чат</title>
 <style>
 body {
   margin: 0;
@@ -23,8 +23,8 @@ h1 {
 }
 
 #chat {
-  width: 100%;
-  max-width: 650px;
+  width: 90%;
+  max-width: 800px;
   background-color: #1a0000;
   padding: 20px;
   border-radius: 15px;
@@ -61,7 +61,7 @@ input, textarea {
   font-size: 1em;
 }
 
-button {
+button.send {
   background-color: #ff1a1a;
   color: #fff;
   padding: 10px 20px;
@@ -72,13 +72,26 @@ button {
   transition: all 0.3s ease;
 }
 
-button:hover {
+button.send:hover {
   background-color: #b30000;
   transform: scale(1.05);
 }
 
+/* Ссылка «Вернуться в форумы» */
+#backLink {
+  margin-top: 15px;
+  color: #fff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#backLink:hover {
+  color: #ff1a1a;
+  transition: 0.3s;
+}
+
 footer {
-  margin-top: 30px;
+  margin-top: 20px;
   color: #999;
   font-size: 0.85em;
 }
@@ -86,21 +99,24 @@ footer {
 </head>
 <body>
 
-<h1>Чат — Ekakamov</h1>
+<h1>Red Dragon — Чат</h1>
 
 <div id="chat">
   <div id="messages"></div>
   <input type="text" id="username" placeholder="Ваш ник">
   <textarea id="message" rows="3" placeholder="Введите сообщение"></textarea>
   <input type="text" id="photoURL" placeholder="Ссылка на фото (опционально)">
-  <button onclick="sendMessage()">Отправить</button>
+  <button class="send" onclick="sendMessage()">Отправить</button>
+
+  <!-- Ссылка на форумы снизу блока чата -->
+  <div id="backLink" onclick="goBack()">← Вернуться в форумы</div>
 </div>
 
 <footer>© 2025 Red Dragon | Все права защищены</footer>
 
 <script>
-// Простейший чат без сервера (сохраняется только пока страница открыта)
-const badWords = ["сука", "блять", "хуй", "нахуя", "нахуй", "лох", "ебаный", "ебать", "ебал", "соси", "выебать", "выебал", "секс", "порно", "дрочить", "даун", "долбоеб", "Сука", "Блять", "Хуй", "Нахуя", "Нахуй", "Лох", "Ебаный", "Ебать", "Ебал", "Соси", "Выебать", "Выебал", "Секс", "Порно", "Дрочить", "Даун", "Долбоеб", "Гондон", "гондон", "бля", "шлюха", "член", "сук", "гей", "лесби", "нах", "пидор", "пидр", "порн", "пизда", "пизд", "сперма"]; // сюда добавь запрещенные слова
+// Запрещенные слова (можно добавить свои)
+const badWords = ["****", "****"]; // замените звездочки на реальные слова
 
 function sendMessage() {
   const username = document.getElementById('username').value.trim();
@@ -134,7 +150,12 @@ function sendMessage() {
   document.getElementById('photoURL').value = "";
 }
 
-// Автоочистка каждые 2 часа (7200000 мс)
+// Переход на форумы
+function goBack() {
+  window.location.href = "index.html"; // ссылка на главную страницу форумов
+}
+
+// Автоочистка каждые 2 часа
 setInterval(() => {
   document.getElementById('messages').innerHTML = "";
   console.log("Чат очищен автоматически каждые 2 часа");
