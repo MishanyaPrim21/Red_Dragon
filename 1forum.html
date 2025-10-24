@@ -1,159 +1,159 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Red Dragon — Отчет о снятии выговора</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: "Segoe UI", Arial, sans-serif;
-            background: linear-gradient(135deg, #000000, #2b0000);
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Red Dragon — Отчет о снятии выговора</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #000000, #2b0000);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-        h1 {
-            color: #ff1a1a;
-            font-size: 2.2em;
-            text-shadow: 0 0 15px #ff0000, 0 0 30px #800000;
-            margin-bottom: 30px;
-            text-align: center;
-        }
+    h1 {
+      color: #ff1a1a;
+      font-size: 2.2em;
+      text-shadow: 0 0 15px #ff0000, 0 0 30px #800000;
+      margin-bottom: 30px;
+      text-align: center;
+    }
 
-        #chat {
-            width: 100%;
-            max-width: 600px;
-            background-color: #1a0000;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px #ff1a1a, 0 0 40px #b30000;
-        }
+    #chat {
+      width: 100%;
+      max-width: 600px;
+      background-color: #1a0000;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #ff1a1a, 0 0 40px #b30000;
+    }
 
-        #messages {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
+    #messages {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
 
-        .message {
-            background-color: #330000;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            box-shadow: 0 0 5px #ff1a1a;
-        }
+    .message {
+      background-color: #330000;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px #ff1a1a;
+    }
 
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            border: none;
-            font-size: 1em;
-        }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1em;
+    }
 
-        button {
-            background-color: #ff1a1a;
-            color: #fff;
-            padding: 10px 20px;
-            font-weight: bold;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    button {
+      background-color: #ff1a1a;
+      color: #fff;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-        button:hover {
-            background-color: #b30000;
-            transform: scale(1.05);
-        }
+    button:hover {
+      background-color: #b30000;
+      transform: scale(1.05);
+    }
 
-        .back {
-            margin-top: 20px;
-        }
+    .back {
+      margin-top: 20px;
+    }
 
-        footer {
-            margin-top: 30px;
-            color: #999;
-            font-size: 0.85em;
-        }
-    </style>
+    footer {
+      margin-top: 30px;
+      color: #999;
+      font-size: 0.85em;
+    }
+  </style>
 
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
+  <!-- Firebase (compat версия для простого HTML) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
 <h1>Отчет о снятии выговора — Red Dragon</h1>
 
 <div id="chat">
-    <div id="messages"></div>
-    <input type="text" id="username" placeholder="Ваш ник">
-    <textarea id="message" rows="3" placeholder="Введите сообщение"></textarea>
-    <button onclick="sendMessage()">Отправить</button>
+  <div id="messages"></div>
+  <input type="text" id="username" placeholder="Ваш ник">
+  <textarea id="message" rows="3" placeholder="Введите сообщение"></textarea>
+  <button onclick="sendMessage()">Отправить</button>
 </div>
 
 <div class="back">
-    <a href="gtarpclan.html" style="color:#fff; text-decoration:underline;">⬅ Вернуться к форумам</a>
+  <a href="gtarpclan.html" style="color:#fff; text-decoration:underline;">⬅ Вернуться к форумам</a>
 </div>
 
 <footer>© 2025 Red Dragon | Все права защищены</footer>
 
 <script>
-  // Настройка Firebase
+  // Firebase config для forumchat1
   const firebaseConfig = {
-    apiKey: "ТВОЙ_API_KEY",
-    authDomain: "ТВОЙ_PROJECT_ID.firebaseapp.com",
-    databaseURL: "https://ТВОЙ_PROJECT_ID.firebaseio.com",
-    projectId: "ТВОЙ_PROJECT_ID",
-    storageBucket: "ТВОЙ_PROJECT_ID.appspot.com",
-    messagingSenderId: "ТВОЙ_SENDER_ID",
-    appId: "ТВОЙ_APP_ID"
+    apiKey: "AIzaSyDCn-cLI7Y0DuYh0u4Yn5o1zutxXJe5Hb8",
+    authDomain: "reddragonforum.firebaseapp.com",
+    databaseURL: "https://reddragonforum-default-rtdb.firebaseio.com",
+    projectId: "reddragonforum",
+    storageBucket: "reddragonforum.firebasestorage.app",
+    messagingSenderId: "283815909725",
+    appId: "1:283815909725:web:10f338784d4f25e242b0b4"
   };
 
+  // Инициализация Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
   function sendMessage() {
-      const username = document.getElementById('username').value.trim();
-      const message = document.getElementById('message').value.trim();
+    const username = document.getElementById('username').value.trim();
+    const message = document.getElementById('message').value.trim();
 
-      if(username === "" || message === "") {
-          alert("Введите ник и сообщение!");
-          return;
-      }
+    if(username === "" || message === "") {
+      alert("Введите ник и сообщение!");
+      return;
+    }
 
-      const newMessage = {
-          name: username,
-          text: message,
-          time: Date.now()
-      };
+    const newMessage = {
+      name: username,
+      text: message,
+      time: Date.now()
+    };
 
-      db.ref('reports_chat').push(newMessage);
-      document.getElementById('message').value = "";
+    db.ref('reports_chat').push(newMessage);
+    document.getElementById('message').value = "";
   }
 
   db.ref('reports_chat').on('value', snapshot => {
-      const messagesDiv = document.getElementById('messages');
-      messagesDiv.innerHTML = "";
-      const data = snapshot.val();
-      if(data){
-          Object.values(data).forEach(msg => {
-              const div = document.createElement('div');
-              div.classList.add('message');
-              const time = new Date(msg.time).toLocaleTimeString();
-              div.innerHTML = `<strong>${msg.name}</strong> [${time}]: ${msg.text}`;
-              messagesDiv.appendChild(div);
-          });
-          messagesDiv.scrollTop = messagesDiv.scrollHeight;
-      }
+    const messagesDiv = document.getElementById('messages');
+    messagesDiv.innerHTML = "";
+    const data = snapshot.val();
+    if(data){
+      Object.values(data).forEach(msg => {
+        const div = document.createElement('div');
+        div.classList.add('message');
+        const time = new Date(msg.time).toLocaleTimeString();
+        div.innerHTML = `<strong>${msg.name}</strong> [${time}]: ${msg.text}`;
+        messagesDiv.appendChild(div);
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
   });
 </script>
 
