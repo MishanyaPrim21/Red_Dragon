@@ -32,10 +32,12 @@
       padding: 20px;
       border-radius: 15px;
       box-shadow: 0 0 20px #ff1a1a, 0 0 40px #b30000;
+      display: flex;
+      flex-direction: column;
     }
 
     #messages {
-      max-height: 300px;
+      max-height: 350px;
       overflow-y: auto;
       margin-bottom: 20px;
     }
@@ -47,6 +49,7 @@
       border-radius: 10px;
       box-shadow: 0 0 5px #ff1a1a;
       word-wrap: break-word;
+      white-space: pre-wrap;
     }
 
     input, textarea {
@@ -56,6 +59,7 @@
       border-radius: 10px;
       border: none;
       font-size: 1em;
+      box-sizing: border-box;
     }
 
     button {
@@ -83,9 +87,21 @@
       color: #999;
       font-size: 0.85em;
     }
+
+    img.chat-image {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 8px;
+    }
+
+    label {
+      font-size: 0.9em;
+      color: #ccc;
+      margin-bottom: 5px;
+    }
   </style>
 
-  <!-- Firebase compat SDK -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
@@ -95,8 +111,11 @@
 
 <div id="chat">
   <div id="messages"></div>
+
   <input type="text" id="username" placeholder="Ваш ник">
   <textarea id="message" rows="3" placeholder="Введите сообщение"></textarea>
+  <input type="text" id="imageUrl" placeholder="URL картинки (по желанию)">
+  
   <button onclick="sendMessage()">Отправить</button>
 </div>
 
@@ -107,7 +126,7 @@
 <footer>© 2025 Red Dragon | Все права защищены</footer>
 
 <script>
-  // Firebase config для проекта forumchat1
+  // Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyDCn-cLI7Y0DuYh0u4Yn5o1zutxXJe5Hb8",
     authDomain: "reddragonforum.firebaseapp.com",
@@ -121,60 +140,69 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  // Фильтр запрещенных слов
-  const badWords = ["сука", "блять", "хуй", "нахуя", "нахуй", "лох", "ебаный", "ебать", "ебал", "соси", "выебать", "выебал", "секс", "порно", "дрочить", "даун", "долбоеб", "гондон", "бля", "шлюха", "член", "пидор", "пидр", "пизда"];
+  // Список запрещённых слов
+  const badWords = ["сука","блять","хуй","нахуя","нахуй","лох","ебаный","ебать","ебал","соси","выебать","выебал","секс","порно","дрочить","даун","долбоеб","гондон","бля","шлюха","член","пидор","пидр","пизда"];
 
   function containsBadWord(text) {
-    const lower = text.toLowerCase();
-    return badWords.some(word => lower.includes(word));
+    return badWords.some(word => text.toLowerCase().includes(word));
   }
 
-  // Отправка сообщений
+  // Сохраняем ник
+  const savedName = localStorage.getItem("username");
+  if (savedName) document.getElementById("username").value = savedName;
+
   function sendMessage() {
-    const username = document.getElementById('username').value.trim();
-    const message = document.getElementById('message').value.trim();
+    const username = document.getElementById("username").value.trim();
+    const message = document.getElementById("message").value.trim();
+    const imageUrl = document.getElementById("imageUrl").value.trim();
 
-    if (!username || !message) {
-      alert("Введите ник и сообщение!");
-      return;
-    }
+    if (!username) return alert("Введите ник!");
+    if (!message && !imageUrl) return alert("Введите сообщение или ссылку на картинку!");
 
-    if (containsBadWord(username) || containsBadWord(message)) {
-      alert("Ник или сообщение содержат запрещённые слова!");
-      return;
-    }
+    if (containsBadWord(username) || containsBadWord(message))
+      return alert("Ник или сообщение содержат запрещённые слова!");
+
+    localStorage.setItem("username", username);
 
     const newMessage = {
       name: username,
       text: message,
+      image: imageUrl,
       time: Date.now()
     };
 
-    db.ref('chat1').push(newMessage);
-    document.getElementById('message').value = "";
+    db.ref("chat1").push(newMessage);
+    document.getElementById("message").value = "";
+    document.getElementById("imageUrl").value = "";
   }
 
-  // Отображение сообщений
-  db.ref('chat1').on('value', snapshot => {
-    const messagesDiv = document.getElementById('messages');
+  // Вывод сообщений
+  db.ref("chat1").on("value", (snapshot) => {
+    const messagesDiv = document.getElementById("messages");
     messagesDiv.innerHTML = "";
     const data = snapshot.val();
     if (data) {
       Object.values(data).forEach(msg => {
-        const div = document.createElement('div');
-        div.classList.add('message');
+        const div = document.createElement("div");
+        div.classList.add("message");
         const time = new Date(msg.time).toLocaleTimeString();
-        div.innerHTML = `<strong>${msg.name}</strong> [${time}]: ${msg.text}`;
+        div.innerHTML = `<strong>${msg.name}</strong> [${time}]:<br>${msg.text}`;
+        if (msg.image) {
+          const img = document.createElement("img");
+          img.src = msg.image;
+          img.className = "chat-image";
+          div.appendChild(img);
+        }
         messagesDiv.appendChild(div);
       });
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
   });
 
-  // Автоочистка каждые 2 часа
+  // Очистка каждые 2 часа
   setInterval(() => {
-    db.ref('chat1').remove();
-    console.log("Чат автоматически очищен через 2 часа");
+    db.ref("chat1").remove();
+    console.log("Чат очищен (2 часа)");
   }, 2 * 60 * 60 * 1000);
 </script>
 
