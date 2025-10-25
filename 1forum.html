@@ -1,165 +1,185 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Red Dragon — Чат</title>
-<style>
-body {
-  margin: 0;
-  padding: 20px;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(135deg, #000000, #2b0000);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Red Dragon — Чат Ekakamovych</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #000000, #2b0000);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-h1 {
-  color: #ff1a1a;
-  text-shadow: 0 0 15px #ff0000, 0 0 30px #800000;
-}
+    h1 {
+      color: #ff1a1a;
+      font-size: 2.2em;
+      text-shadow: 0 0 15px #ff0000, 0 0 30px #800000;
+      margin-bottom: 30px;
+      text-align: center;
+    }
 
-#chat {
-  width: 90%;
-  max-width: 800px;
-  background-color: #1a0000;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 0 20px #ff1a1a, 0 0 40px #b30000;
-}
+    #chat {
+      width: 100%;
+      max-width: 600px;
+      background-color: #1a0000;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #ff1a1a, 0 0 40px #b30000;
+    }
 
-#messages {
-  max-height: 300px;
-  overflow-y: auto;
-  margin-bottom: 20px;
-}
+    #messages {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
 
-.message {
-  background-color: #330000;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  box-shadow: 0 0 5px #ff1a1a;
-  word-wrap: break-word;
-}
+    .message {
+      background-color: #330000;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px #ff1a1a;
+    }
 
-.message img {
-  max-width: 100%;
-  border-radius: 10px;
-  margin-top: 10px;
-}
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1em;
+    }
 
-input, textarea {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  border: none;
-  font-size: 1em;
-}
+    button {
+      background-color: #ff1a1a;
+      color: #fff;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-button.send {
-  background-color: #ff1a1a;
-  color: #fff;
-  padding: 10px 20px;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+    button:hover {
+      background-color: #b30000;
+      transform: scale(1.05);
+    }
 
-button.send:hover {
-  background-color: #b30000;
-  transform: scale(1.05);
-}
+    .back {
+      margin-top: 20px;
+    }
 
-/* Ссылка «Вернуться в форумы» */
-#backLink {
-  margin-top: 15px;
-  color: #fff;
-  text-decoration: underline;
-  cursor: pointer;
-}
+    footer {
+      margin-top: 30px;
+      color: #999;
+      font-size: 0.85em;
+    }
+  </style>
 
-#backLink:hover {
-  color: #ff1a1a;
-  transition: 0.3s;
-}
-
-footer {
-  margin-top: 20px;
-  color: #999;
-  font-size: 0.85em;
-}
-</style>
+  <!-- Firebase (compat версия для простого HTML) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
-<h1>Red Dragon — Чат</h1>
+<h1>Отчет о снятии выговора — Red Dragon</h1>
 
 <div id="chat">
   <div id="messages"></div>
   <input type="text" id="username" placeholder="Ваш ник">
   <textarea id="message" rows="3" placeholder="Введите сообщение"></textarea>
-  <input type="text" id="photoURL" placeholder="Ссылка на фото (опционально)">
-  <button class="send" onclick="sendMessage()">Отправить</button>
+  <button onclick="sendMessage()">Отправить</button>
+</div>
 
-  <!-- Ссылка на форумы снизу блока чата -->
-  <div id="backLink" onclick="goBack()">← Вернуться в форумы</div>
+<div class="back">
+  <a href="gtarpclan.html" style="color:#fff; text-decoration:underline;">⬅ Вернуться к форумам</a>
 </div>
 
 <footer>© 2025 Red Dragon | Все права защищены</footer>
 
 <script>
-// Запрещенные слова (можно добавить свои)
-const badWords = ["****", "****"]; // замените звездочки на реальные слова
+  // Firebase config для forumchat1
+  const firebaseConfig = {
+    apiKey: "AIzaSyDCn-cLI7Y0DuYh0u4Yn5o1zutxXJe5Hb8",
+    authDomain: "reddragonforum.firebaseapp.com",
+    databaseURL: "https://reddragonforum-default-rtdb.firebaseio.com",
+    projectId: "reddragonforum",
+    storageBucket: "reddragonforum.firebasestorage.app",
+    messagingSenderId: "283815909725",
+    appId: "1:283815909725:web:10f338784d4f25e242b0b4"
+  };
 
-function sendMessage() {
-  const username = document.getElementById('username').value.trim();
-  const message = document.getElementById('message').value.trim();
-  const photoURL = document.getElementById('photoURL').value.trim();
+  // Инициализация Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-  if(!username) return alert("Введите ник!");
-  if(!message && !photoURL) return alert("Введите сообщение или вставьте ссылку на фото!");
+  // Массив запрещённых слов (заменить звездочки на слова)
+  const badWords = ["сука", "блять", "хуй", "нахуя", "нахуй", "лох", "ебаный", "ебать", "ебал", "соси", "выебать", "выебал", "секс", "порно", "дрочить", "даун", "долбоеб", "Сука", "Блять", "Хуй", "Нахуя", "Нахуй", "Лох", "Ебаный", "Ебать", "Ебал", "Соси", "Выебать", "Выебал", "Секс", "Порно", "Дрочить", "Даун", "Долбоеб", "Гондон", "гондон", "бля", "шлюха", "член", "сук", "гей", "лесби", "нах", "пидор", "пидр", "пизда"];
 
-  // Проверка запрещённых слов
-  for(let word of badWords){
-    if(username.toLowerCase().includes(word) || message.toLowerCase().includes(word)){
-      alert("Запрещенные слова в нике или сообщении!");
+  // Отправка сообщений
+  function sendMessage() {
+    const username = document.getElementById('username').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if(username === "" || message === "") {
+      alert("Введите ник и сообщение!");
       return;
     }
+
+    const lowerUsername = username.toLowerCase();
+    const lowerMessage = message.toLowerCase();
+
+    for (let word of badWords) {
+      if (lowerUsername.includes(word.toLowerCase()) || lowerMessage.includes(word.toLowerCase())) {
+        alert("Ник или сообщение содержат запрещённые слова!");
+        return;
+      }
+    }
+
+    const newMessage = {
+      name: username,
+      text: message,
+      time: Date.now()
+    };
+
+    db.ref('reports_chat').push(newMessage);
+    document.getElementById('message').value = "";
   }
 
-  const messagesDiv = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.classList.add('message');
+  // Отображение сообщений
+  db.ref('reports_chat').on('value', snapshot => {
+    const messagesDiv = document.getElementById('messages');
+    messagesDiv.innerHTML = "";
+    const data = snapshot.val();
+    if(data){
+      Object.values(data).forEach(msg => {
+        const div = document.createElement('div');
+        div.classList.add('message');
+        const time = new Date(msg.time).toLocaleTimeString();
+        div.innerHTML = `<strong>${msg.name}</strong> [${time}]: ${msg.text}`;
+        messagesDiv.appendChild(div);
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+  });
 
-  const time = new Date().toLocaleTimeString();
-  div.innerHTML = `<strong>${username}</strong> [${time}]: ${message}`;
-  if(photoURL) div.innerHTML += `<br><img src="${photoURL}" alt="photo">`;
+  // Автоочистка каждые 2 часа (2*60*60*1000 миллисекунд)
+  setInterval(() => {
+    db.ref('reports_chat').remove();
+    console.log("Чат очищен автоматически каждые 2 часа!");
+  }, 2 * 60 * 60 * 1000);
 
-  messagesDiv.appendChild(div);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+// Для первого чата
+const chat1Ref = database.ref('chat1');
 
-  // Очистка полей ввода
-  document.getElementById('message').value = "";
-  document.getElementById('photoURL').value = "";
-}
-
-// Переход на форумы
-function goBack() {
-  window.location.href = "index.html"; // ссылка на главную страницу форумов
-}
-
-// Автоочистка каждые 2 часа
-setInterval(() => {
-  document.getElementById('messages').innerHTML = "";
-  console.log("Чат очищен автоматически каждые 2 часа");
-}, 2 * 60 * 60 * 1000);
 </script>
 
 </body>
